@@ -7,7 +7,9 @@ namespace ufl_cap4053 { namespace fundamentals {
 	template <class T>
 	class TreeNode {
 	private:
-		T var;
+		T val;
+		
+
 
 	public:
 

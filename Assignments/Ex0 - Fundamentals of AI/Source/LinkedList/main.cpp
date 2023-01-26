@@ -218,6 +218,7 @@ int main()
     return 0;
 }
 
+/*
 template <typename T, typename F>
 void traverse(fund::LinkedList<T> const& q, F& dataFunction)
 {
@@ -229,7 +230,7 @@ void traverse(fund::LinkedList<T> const& q, F& dataFunction)
     }
     printCString("]");
 }
-
+*/
 void printString(const string testString)
 {
     cout << ' ' << testString;
