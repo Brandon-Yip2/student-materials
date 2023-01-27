@@ -1,14 +1,18 @@
-
+#include <vector>
+#include <queue>
+#include <iostream>
+using namespace std;
 
 // TreeNode class should go in the "ufl_cap4053::fundamentals" namespace!
 namespace ufl_cap4053 { namespace fundamentals {
 
-
 	template <typename T>
 	class TreeNode {
-	private:
-		T val;
 	public:
+		T val;
+		std::vector<TreeNode<T>> childNodes;
+		size_t numChildren;
+	
 			//Constructor for TreeNode.Should store a default - constructed data value and start with no children.
 			TreeNode<T>();
 			//Constructor for TreeNode.Should store element as its data valueand start with no children.
@@ -33,56 +37,107 @@ namespace ufl_cap4053 { namespace fundamentals {
 			void postOrderTraverse(void (*dataFunction)(const T)) const;
 		};
 
+	//Constructor for TreeNode.Should store a default - constructed data value and start with no children.
 	template <typename T>
 	TreeNode<T>::TreeNode<T>() {
-	
+		this->numChildren = 0;
+		this->val = NULL;
 	}
 
+	//Constructor for TreeNode.Should store element as its data valueand start with no children.
 	template <typename T>
 	TreeNode<T>::TreeNode<T>(T element) {
-	
+		this->val = element;
+		this->numChildren = 0;
 	}
 	template <typename T>
 	const T& TreeNode<T>::getData() const {
-	
+		return this->val;
 	}
 	template <typename T>
 	size_t TreeNode<T>::getChildCount() const {
-	
+		return this->numChildren;
 	}
 	template <typename T>
 	TreeNode<T>* TreeNode<T>::getChild(size_t index) {
-	
+		
+		return &(this->childNodes[index]);
+
 	}
 
 	template <typename T>
 	TreeNode<T>* TreeNode<T>::getChild(size_t index) const {
-	
+		//Change this ----------------------------------------------------------------------------------------------------------------------
+		TreeNode<T> currNode = this->childNodes[index];
+		TreeNode<T>* toReturn = &currNode;
+		return toReturn;
+
 	}
 
 	template <typename T>
 	void TreeNode<T>::addChild(TreeNode<T>* child) {
-	
+		//Make a new node
+		TreeNode<T>* adding = new TreeNode<T>();
+		adding->val = child->val;
+		adding->numChildren = child->numChildren;
+		adding->childNodes = child->childNodes;
+		this->numChildren++;
+
+		this->childNodes.push_back(*adding);
+
 	}
 
 	template <typename T>
 	void TreeNode<T>::removeChild(size_t index) {
-	
+		
 	}
 
 	template <typename T>
 	void TreeNode<T>::breadthFirstTraverse(void (*dataFunction)(const T)) const {
 	
+		//This Breadth first search does not need duplicate checking since we can only go down the tree, not back up ***ASSUMPTION***
+
+		queue<TreeNode> q;
+		q.push(*this);
+
+		while (!q.empty()) {
+			//Store first node
+			TreeNode current = q.front();
+			//Print that node
+			dataFunction(q.front().val);
+			//pop off the node since we already printed
+			q.pop();
+			//If there are children, add them to the q
+			if (current.childNodes.size() > 0) {
+				for (int i = 0; i < current.childNodes.size(); i++) {
+					q.push(current.childNodes[i]);
+				}
+			}
+
+		}
+		
 	}
 
 	template <typename T>
 	void TreeNode<T>::preOrderTraverse(void (*dataFunction)(const T)) const {
 	
+		dataFunction(this->val);
+
+		for (int i = 0; i <this->getChildCount(); i++) {
+			this->childNodes[i].preOrderTraverse(*dataFunction);
+		}
+
+
 	}
 
 	template <typename T>
 	void TreeNode<T>::postOrderTraverse(void (*dataFunction)(const T)) const {
 	
+		for (int i = 0; i < this->getChildCount(); i++) {
+			this->childNodes[i].postOrderTraverse(*dataFunction);
+		}
+
+		dataFunction(this->val);
 	}
 
 
