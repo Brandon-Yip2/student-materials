@@ -101,12 +101,13 @@ namespace ufl_cap4053 { namespace fundamentals {
 			
 			//Inserts the specified element at the end of the list.
 			void enqueue(T element) {
-
+				this->numOfNodes++;
 				//Head doesn't exist (0 length list), make a node and set head to it
 				if (this->head == nullptr) {
 					Node* newHead = new Node();
 					newHead->data = element;
 					this->head = newHead;
+
 				}
 				else {
 					//Iterate until the end using curr
@@ -130,7 +131,22 @@ namespace ufl_cap4053 { namespace fundamentals {
 			//Removes the first element from the list.
 			void dequeue() {
 
+				//Only works if the head is not nullptr (list has 1 node)
+				if (this->head != nullptr) {
+					this->numOfNodes--;
+					//If the list has more than one node 
+					if (this->head->next != nullptr) {
+						//
+						this->head = this->head->next;
+						this->head->prev = nullptr;
 
+					}
+					else {
+						//Only one node
+						this->head = nullptr;
+					}
+
+				}
 
 			};
 			
@@ -151,6 +167,23 @@ namespace ufl_cap4053 { namespace fundamentals {
 			
 			//Removes the first node you find whose data equals the specified element.
 			void remove(T element) {
+
+				if (this->head != nullptr) {
+					Node* curr = this->head;
+					while (curr != nullptr ) {
+						
+						curr = curr->next;
+						if (curr->data == element) {
+							//remove curr
+
+
+
+						}
+					}
+
+
+				}
+
 
 			};
 
