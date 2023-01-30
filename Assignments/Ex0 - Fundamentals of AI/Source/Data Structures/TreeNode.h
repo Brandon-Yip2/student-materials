@@ -8,11 +8,13 @@ namespace ufl_cap4053 { namespace fundamentals {
 
 	template <typename T>
 	class TreeNode {
-	public:
-		T val;
-		std::vector<TreeNode<T>> childNodes;
-		size_t numChildren;
 	
+	private:
+		T val;
+		std::vector<TreeNode<T>*> childNodes;
+		size_t numChildren;
+
+	public:
 			//Constructor for TreeNode.Should store a default - constructed data value and start with no children.
 			TreeNode<T>();
 			//Constructor for TreeNode.Should store element as its data valueand start with no children.
@@ -41,7 +43,6 @@ namespace ufl_cap4053 { namespace fundamentals {
 	template <typename T>
 	TreeNode<T>::TreeNode<T>() {
 		this->numChildren = 0;
-		this->val = NULL;
 	}
 
 	//Constructor for TreeNode.Should store element as its data valueand start with no children.
@@ -60,30 +61,26 @@ namespace ufl_cap4053 { namespace fundamentals {
 	}
 	template <typename T>
 	TreeNode<T>* TreeNode<T>::getChild(size_t index) {
-		
-		return &(this->childNodes[index]);
-
+		return childNodes[index];
 	}
 
 	template <typename T>
 	TreeNode<T>* TreeNode<T>::getChild(size_t index) const {
-		//Change this ----------------------------------------------------------------------------------------------------------------------
-		TreeNode<T> currNode = this->childNodes[index];
-		TreeNode<T>* toReturn = &currNode;
-		return toReturn;
-
+		return childNodes[index];
 	}
 
 	template <typename T>
 	void TreeNode<T>::addChild(TreeNode<T>* child) {
 		//Make a new node
-		TreeNode<T>* adding = new TreeNode<T>();
-		adding->val = child->val;
-		adding->numChildren = child->numChildren;
-		adding->childNodes = child->childNodes;
+		//TreeNode<T>* adding = new TreeNode<T>();
+		//adding->val = child->val;
+		//adding->numChildren = child->numChildren;
+		//adding->childNodes = child->childNodes;
 		this->numChildren++;
 
-		this->childNodes.push_back(*adding);
+		this->childNodes.push_back(child);
+
+	
 
 	}
 
@@ -110,7 +107,7 @@ namespace ufl_cap4053 { namespace fundamentals {
 			//If there are children, add them to the q
 			if (current.childNodes.size() > 0) {
 				for (int i = 0; i < current.childNodes.size(); i++) {
-					q.push(current.childNodes[i]);
+					q.push(*current.childNodes[i]);
 				}
 			}
 
@@ -121,12 +118,12 @@ namespace ufl_cap4053 { namespace fundamentals {
 	template <typename T>
 	void TreeNode<T>::preOrderTraverse(void (*dataFunction)(const T)) const {
 	
+
 		dataFunction(this->val);
 
-		for (int i = 0; i <this->getChildCount(); i++) {
-			this->childNodes[i].preOrderTraverse(*dataFunction);
+		for (int i = 0; i<this->getChildCount(); i++) {
+			(*this->childNodes[i]).preOrderTraverse(*dataFunction);
 		}
-
 
 	}
 
@@ -134,19 +131,11 @@ namespace ufl_cap4053 { namespace fundamentals {
 	void TreeNode<T>::postOrderTraverse(void (*dataFunction)(const T)) const {
 	
 		for (int i = 0; i < this->getChildCount(); i++) {
-			this->childNodes[i].postOrderTraverse(*dataFunction);
+			(*this->childNodes[i]).postOrderTraverse(*dataFunction);
 		}
 
 		dataFunction(this->val);
 	}
-
-
-
-		
-
-
-
-
 
 	
 } } // namespace ufl_cap4053::fundamentals
