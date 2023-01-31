@@ -73,6 +73,9 @@ namespace ufl_cap4053 { namespace fundamentals {
 
 			//Returns an Iterator pointing to the beginning of the list.
 			Iterator begin() const {
+				if (this->head == nullptr) {
+					return Iterator();
+				}
 				return Iterator(this->head);
 			};
 
@@ -107,6 +110,7 @@ namespace ufl_cap4053 { namespace fundamentals {
 					Node* newHead = new Node();
 					newHead->data = element;
 					this->head = newHead;
+					this->tail = newHead;
 
 				}
 				else {
@@ -121,6 +125,8 @@ namespace ufl_cap4053 { namespace fundamentals {
 					curr->next = newTail;
 					newTail->prev = curr;
 
+					this->tail = newTail;
+
 				}
 
 
@@ -130,7 +136,7 @@ namespace ufl_cap4053 { namespace fundamentals {
 			
 			//Removes the first element from the list.
 			void dequeue() {
-
+				Node* toDelete = this->head;
 				//Only works if the head is not nullptr (list has 1 node)
 				if (this->head != nullptr) {
 					this->numOfNodes--;
@@ -139,11 +145,12 @@ namespace ufl_cap4053 { namespace fundamentals {
 						//
 						this->head = this->head->next;
 						this->head->prev = nullptr;
+						delete toDelete;
 
 					}
 					else {
-						//Only one node
 						this->head = nullptr;
+						delete toDelete;
 					}
 
 				}
@@ -153,36 +160,143 @@ namespace ufl_cap4053 { namespace fundamentals {
 			//Removes the last element from the list.
 			void pop() {
 
+				Node* curr = this->head;
+				
+				//if there are elements
+				if (this->head != nullptr) {
+					this->numOfNodes--;
+					while (curr->next != nullptr) {
+						curr = curr->next;
+					}
+					//curr is the last element
+					if (curr->prev == nullptr) {
+						//curr is the only element (head and tail)
+						this->tail = nullptr;
+						this->head = nullptr;
+						Node* toDelete = curr;
+						curr = nullptr;
+						delete toDelete;
+
+					}
+					else {
+						this->tail = curr->prev;
+						Node* toDelete = curr;
+
+						Node* before = curr->prev;
+						before->next = nullptr;
+
+						curr = nullptr;
+						delete toDelete;
+				
+					}
+
+				}
+
+
 			};
 			
 			//Removes all elements from the list.
 			void clear() {
 
+				Node* temp = new Node();
+
+				while (this->head != nullptr) {
+					temp = head;
+					head = head->next;
+					delete temp;
+				}
+
+
+
 			};
 			
 			//Returns true if you find a node whose data equals the specified element, false otherwise.
 			bool contains(T element) const {
-				return true;
+					
+				//if there are elements
+				if (this->head != nullptr) {
+					//if head has the element
+					if (this->head->data == element) {
+						return true;
+					}
+					
+					Node* curr = this->head;
+					while (curr->next != nullptr) {
+						curr = curr->next;
+						if (curr->data == element) {
+							return true;
+						}
+					}
+				
+				
+				}
+				return false;
+
+
+				
 			};
 			
 			//Removes the first node you find whose data equals the specified element.
 			void remove(T element) {
 
 				if (this->head != nullptr) {
-					Node* curr = this->head;
-					while (curr != nullptr ) {
-						
-						curr = curr->next;
-						if (curr->data == element) {
-							//remove curr
+					//Initial check if there is only a head
+					if (this->head->next == nullptr) {
+						this->head = nullptr;
+						delete this->head;
+					}
+					else {
+						//There is more than one node, iterate and find the first
+						Node* curr = this->head;
+						while (curr->next != nullptr || curr->data == element) {
+							
+							//We found the first element, Delete according to 3 rules
+							if (curr->data == element) {
+								
+								//If curr was the head
+								if (curr == this->head) {
+									Node* toDelete = curr;
+									curr->next->prev = nullptr;
+									this->head = curr->next;
+									delete toDelete;
+									break;
+								}
+
+								//Curr was in the middle
+								else if (curr->prev != nullptr && curr->next != nullptr) {
+									Node* before = curr->prev;
+									Node* after = curr->next;
+
+									before->next = after;
+									after->prev = before;
+
+									delete curr;
+									break;
 
 
+								}
+								//If curr was the last
+								else {
+									this->tail = curr->prev;
+									curr->prev->next = nullptr;
+									delete curr;
+									break;
+
+								}
+
+								
+							}
+
+							curr = curr->next;
 
 						}
+
+
+
 					}
 
-
 				}
+
 
 
 			};
