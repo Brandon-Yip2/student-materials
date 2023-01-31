@@ -71,6 +71,13 @@ namespace ufl_cap4053 { namespace fundamentals {
 				this->numOfNodes = 0;
 			};
 
+			//Destructor
+			~LinkedList() {
+				
+				this->clear();
+
+			}
+
 			//Returns an Iterator pointing to the beginning of the list.
 			Iterator begin() const {
 				if (this->head == nullptr) {
@@ -199,11 +206,11 @@ namespace ufl_cap4053 { namespace fundamentals {
 			void clear() {
 
 				Node* temp = new Node();
-
+				this->tail = nullptr;
 				while (this->head != nullptr) {
 					temp = head;
 					head = head->next;
-					delete temp;
+					free(temp);
 				}
 
 

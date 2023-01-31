@@ -5,6 +5,20 @@
 #include <cassert>
 #include <iostream>
 
+// debug_new.cpp
+// compile by using: cl /EHsc /W4 /D_DEBUG /MDd debug_new.cpp
+#define _CRTDBG_MAP_ALLOC
+#include <cstdlib>
+#include <crtdbg.h>
+
+#ifdef _DEBUG
+#define DBG_NEW ok ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+// allocations to be of _CLIENT_BLOCK type
+#else
+#define DBG_NEW ok
+#endif
+
 using namespace std;
 namespace fund = ufl_cap4053::fundamentals;
 
@@ -34,6 +48,9 @@ int main()
     };
     string tempStr;
 
+    _CrtMemState s1;
+    _CrtMemCheckpoint(&s1);
+
     // Test isEmpty function.
     assert(pointerList.isEmpty() && valueList.isEmpty());
 
@@ -47,7 +64,6 @@ int main()
         traverse(pointerList, printCString);
         cout << endl;
     }
-
     // Test dequeue.
     cout << endl << "Testing dequeue..." << endl;
     for (;;)
@@ -64,7 +80,6 @@ int main()
         else
             valueList.dequeue();
     }
-
     // Test removal of only element.
     cout << endl << "Removing the only element from valueList:";
     printCString(valueList.getFront().c_str());
@@ -194,12 +209,17 @@ int main()
         cout << " ELEMENT NOT FOUND." << endl;
     }
 
+   
+
+
     // Test removal of all elements by method.
     cout << endl << "Removing all elements from pointerList...";
     pointerList.clear();
     cout << endl << "\tpointerList:";
     traverse(pointerList, printCString);
     cout << endl;
+
+    _CrtDumpMemoryLeaks();
 
     // Test destructor.
     cout << endl << "Adding elements to test descructor...";
