@@ -1,5 +1,7 @@
 #include "../platform.h" // This file will make exporting DLL symbols simpler for students.
 #include "../Framework/TileSystem/TileMap.h"
+#include <unordered_map>
+#include <vector>
 
 
 namespace ufl_cap4053
@@ -8,6 +10,25 @@ namespace ufl_cap4053
 	{
 		class PathSearch
 		{
+			struct PlannerNode {
+				Tile* current;
+				Tile* prev;
+
+				PlannerNode(Tile* curr) {
+					this->current = curr;
+				}
+
+			};
+
+			private:
+				TileMap* map;
+				std::unordered_map<Tile*, std::vector<Tile*>> tileNeighbors;
+				std::unordered_map<Tile*, PlannerNode*> PlannerNodes;
+
+
+
+
+
 		// CLASS DECLARATION GOES HERE
 			public:
 				DLLEXPORT PathSearch(); // EX: DLLEXPORT required for public methods - see platform.h
@@ -45,8 +66,9 @@ namespace ufl_cap4053
 				//Return a vector containing the solution path as an ordered series of Tile pointers from finish to start.Once
 				//a search has been completed, this method continue to return the path until initialize() is called.
 				DLLEXPORT std::vector<Tile const*> const getSolution() const;
-		private:
-				DLLEXPORT bool areAdjacent(const Tile* lhs, const Tile* rhs);
+		
+
+
 				
 		};
 	}

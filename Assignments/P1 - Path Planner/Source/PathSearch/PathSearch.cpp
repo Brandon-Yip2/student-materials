@@ -1,5 +1,9 @@
 #include "PathSearch.h"
 #include <vector>
+#include "../PriorityQueue.h"
+#include <unordered_map>
+#include <queue>
+
 namespace ufl_cap4053
 {
 	namespace searches
@@ -20,6 +24,7 @@ namespace ufl_cap4053
 		//must take no longer than twice the benchmark example for any given map.
 		DLLEXPORT void PathSearch::load(TileMap* _tileMap) {
 			
+			this->map = _tileMap;
 			TileMap* rawData = _tileMap;
 			int cols = rawData->getColumnCount();
 			int rows = rawData->getRowCount();
@@ -27,7 +32,146 @@ namespace ufl_cap4053
 
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
+					//For each of the Tiles
 					Tile* curr = rawData->getTile(i, j);
+					int neighborNum = 0;
+
+					//Even or odd row?
+					bool even = false;
+					if (i % 2 == 0) {
+						even = true;
+					}
+
+					//Even row Tile
+					if (even && curr->getWeight() != 0) {
+						//Right Tile
+						if (curr->getColumn() < cols-1) {
+							if ((rawData->getTile(curr->getRow(), curr->getColumn() + 1)->getWeight() != 0)) {
+								Tile* going = rawData->getTile(curr->getRow(), curr->getColumn() + 1);
+								curr->addLineTo(going, 3);
+								tileNeighbors[curr].push_back(going);
+								neighborNum++;
+							}
+						}
+						//Bottom Right
+						if (curr->getRow() < rows-1) {
+							if ((rawData->getTile(curr->getRow() + 1, curr->getColumn()))->getWeight() != 0) {
+								Tile* going = (rawData->getTile(curr->getRow() + 1, curr->getColumn()));
+								curr->addLineTo(going, 3);
+								tileNeighbors[curr].push_back(going);
+								neighborNum++;
+
+							}
+							
+						}
+						//Bottom Left
+						if (curr->getRow() < rows - 1 && curr->getColumn() > 0) {
+							if ((rawData->getTile(curr->getRow() + 1, curr->getColumn() - 1))->getWeight() != 0) {
+								Tile* going = (rawData->getTile(curr->getRow() + 1, curr->getColumn() - 1));
+								curr->addLineTo(going, 3);
+								tileNeighbors[curr].push_back(going);
+								neighborNum++;
+							}
+						}
+						//Left
+						if (curr->getColumn() > 0) {
+							if ((rawData->getTile(curr->getRow(), curr->getColumn() - 1))->getWeight() != 0) {
+								Tile* going = (rawData->getTile(curr->getRow(), curr->getColumn() - 1));
+								curr->addLineTo(going, 3);
+								tileNeighbors[curr].push_back(going);
+								neighborNum++;
+							}	
+						}
+						//Top Left
+						if (curr->getRow() > 0 && curr->getColumn() > 0) {
+							if ((rawData->getTile(curr->getRow() - 1, curr->getColumn() - 1))->getWeight() != 0) {
+								Tile* going = (rawData->getTile(curr->getRow() - 1, curr->getColumn() - 1));
+								curr->addLineTo(going, 3);
+								tileNeighbors[curr].push_back(going);
+								neighborNum++;
+							}
+							
+						}
+						//Top Right
+						if (curr->getRow() > 0 ) {
+							if ((rawData->getTile(curr->getRow() - 1, curr->getColumn()))->getWeight() != 0) {
+								Tile* going = (rawData->getTile(curr->getRow() - 1, curr->getColumn()));
+								curr->addLineTo(going, 3);
+								tileNeighbors[curr].push_back(going);
+								neighborNum++;
+							}			
+						}
+
+
+
+						}
+						//Odd row tile
+						else if (even == false && curr->getWeight() != 0) {
+							//Right Tile
+							if (curr->getColumn() < cols - 1) {
+								if ((rawData->getTile(curr->getRow(), curr->getColumn() + 1)->getWeight() != 0)) {
+									Tile* going = (rawData->getTile(curr->getRow(), curr->getColumn() + 1));
+									curr->addLineTo(going, 3);
+									tileNeighbors[curr].push_back(going);
+									neighborNum++;
+								}
+
+							}
+							//Bottom Right
+							if (curr->getRow() < rows - 1 && curr->getColumn() < cols - 1) {
+								if ((rawData->getTile(curr->getRow() + 1, curr->getColumn() + 1))->getWeight() != 0) {
+									Tile* going = (rawData->getTile(curr->getRow() + 1, curr->getColumn() + 1));
+									curr->addLineTo(going, 3);
+									tileNeighbors[curr].push_back(going);
+									neighborNum++;
+								}
+
+
+								
+							}
+							//Bottom Left
+							if (curr->getRow() < rows - 1) {
+								if ((rawData->getTile(curr->getRow() + 1, curr->getColumn()))->getWeight() != 0) {
+									Tile* going = (rawData->getTile(curr->getRow() + 1, curr->getColumn()));
+									curr->addLineTo(going, 3);
+									tileNeighbors[curr].push_back(going);
+									neighborNum++;
+								}
+								
+							}
+							//Left
+							if (curr->getColumn() > 0) {
+								if ((rawData->getTile(curr->getRow(), curr->getColumn() - 1))->getWeight() != 0) {
+									Tile* going = (rawData->getTile(curr->getRow(), curr->getColumn() - 1));
+									curr->addLineTo(going, 3);
+									tileNeighbors[curr].push_back(going);
+									neighborNum++;
+								}
+								
+							}
+							//Top Left
+							if (curr->getRow() > 0) {
+								if ((rawData->getTile(curr->getRow() - 1, curr->getColumn()))->getWeight() != 0) {
+									Tile* going = (rawData->getTile(curr->getRow() - 1, curr->getColumn()));
+									curr->addLineTo(going, 3);
+									tileNeighbors[curr].push_back(going);
+									neighborNum++;
+								}
+								
+							}
+							//Top Right
+							if (curr->getRow() > 0 && curr->getColumn() < cols - 1) {
+								if ((rawData->getTile(curr->getRow() - 1, curr->getColumn() + 1))->getWeight() != 0) {
+									Tile* going = (rawData->getTile(curr->getRow() - 1, curr->getColumn() + 1));
+									curr->addLineTo(going, 3);
+									tileNeighbors[curr].push_back(going);
+									neighborNum++;
+								}
+								
+							}
+						}
+
+
 
 
 				}
@@ -39,6 +183,22 @@ namespace ufl_cap4053
 		//Called before any update of the path planner; should prepare for search to be performed between the tiles at
 		//the coordinates indicated.This method is always preceded by at least one call to load().
 		DLLEXPORT void PathSearch::initialize(int startRow, int startCol, int goalRow, int goalCol) {
+			//Sets starting and end points, adds start point to search queue
+			//ufl_cap4053::PriorityQueue<int> pQ();
+
+			Tile* start = map->getTile(startRow, startCol);
+			Tile* end = map->getTile(goalRow, goalCol);
+
+			//Queue 
+			std::queue<PlannerNode*> open;
+			//Binds a tile to a plannerNode (ones that are actually visited eventually)
+			std::unordered_map<Tile*, PlannerNode*> visited;
+
+			PlannerNode* firstPlanner = new PlannerNode(start);
+			open.push(firstPlanner);
+
+			visited[start] = open.front();
+
 
 		};
 
@@ -47,6 +207,20 @@ namespace ufl_cap4053
 		//method should only do a single iteration of the algorithm.Otherwise the update should only iterate for the
 		//indicated number of milliseconds.This method is always preceded by at least one call to initialize().
 		DLLEXPORT void PathSearch::update(long timeslice) {
+			bool once;
+			if (timeslice == 0) {
+				once = true;
+			}
+			//one iteration
+			if (!once) {
+			
+			}
+			//continue until time is 0
+			else {
+				
+			}
+
+			
 
 		};
 
@@ -66,7 +240,7 @@ namespace ufl_cap4053
 		//Returns true if the update function has finished because it found a solution, and false otherwise.Once a
 		//search has completed, this method should continue to return true until initialize() is called.
 		DLLEXPORT bool PathSearch::isDone() const {
-			return true;
+			return false;
 		};
 
 		//Return a vector containing the solution path as an ordered series of Tile pointers from finish to start.Once
@@ -76,14 +250,7 @@ namespace ufl_cap4053
 			return toReturn;
 		};
 
-		DLLEXPORT bool areAdjacent(const Tile* lhs, const Tile* rhs) {
-			return true;
-		};
-
-
-
-
-
+		
 
 
 
