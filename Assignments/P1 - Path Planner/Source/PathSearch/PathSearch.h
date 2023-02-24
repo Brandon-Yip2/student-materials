@@ -2,6 +2,7 @@
 #include "../Framework/TileSystem/TileMap.h"
 #include <unordered_map>
 #include <vector>
+#include <queue>
 
 
 namespace ufl_cap4053
@@ -11,19 +12,37 @@ namespace ufl_cap4053
 		class PathSearch
 		{
 			struct PlannerNode {
-				Tile* current;
-				Tile* prev;
+				Tile* selfTile;
+				PlannerNode* prev;
 
 				PlannerNode(Tile* curr) {
-					this->current = curr;
+					this->selfTile = curr;
 				}
 
 			};
 
 			private:
+				bool solved = false;
+				//This contains the raw TileMap 
 				TileMap* map;
+
+
+				//Contains each Tile* and their neighbor Tile*
 				std::unordered_map<Tile*, std::vector<Tile*>> tileNeighbors;
+
+				//Uses in the search. Binds a Tile* to a PlannerNode (Planner nodes have the Tile* itself and its parent)
 				std::unordered_map<Tile*, PlannerNode*> PlannerNodes;
+
+				//Stores the current Queue for the search
+				std::queue<PlannerNode*> q;
+
+				//Stores the visited Tile* in a map
+				std::unordered_map<Tile*, PlannerNode*> visited;
+
+				//Start and ending Tiles for the current search
+				Tile* start = nullptr;
+				Tile* end = nullptr;
+
 
 
 

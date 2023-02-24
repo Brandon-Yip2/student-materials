@@ -186,18 +186,14 @@ namespace ufl_cap4053
 			//Sets starting and end points, adds start point to search queue
 			//ufl_cap4053::PriorityQueue<int> pQ();
 
-			Tile* start = map->getTile(startRow, startCol);
-			Tile* end = map->getTile(goalRow, goalCol);
-
-			//Queue 
-			std::queue<PlannerNode*> open;
-			//Binds a tile to a plannerNode (ones that are actually visited eventually)
-			std::unordered_map<Tile*, PlannerNode*> visited;
+			this->start = map->getTile(startRow, startCol);
+			this->end = map->getTile(goalRow, goalCol);
 
 			PlannerNode* firstPlanner = new PlannerNode(start);
-			open.push(firstPlanner);
+			
+			this->q.push(firstPlanner);
 
-			visited[start] = open.front();
+			this->visited[start] = q.front();
 
 
 		};
@@ -212,8 +208,52 @@ namespace ufl_cap4053
 				once = true;
 			}
 			//one iteration
-			if (!once) {
-			
+			if (once) {
+				
+				//If the q isn't empty, do ONE iteration of the algorithm
+				if (!q.empty()) {
+					PlannerNode* current = q.front();
+					q.pop();
+					current->selfTile->setFill(0xFFFFC0CB);
+					
+
+					//The current Tile is the end tile, End algorithm
+					if (current->selfTile == this->end) {
+						solved = true;
+						return;
+					}
+
+					//Not the solution, add its children to the Q
+					for (int i = 0; i < tileNeighbors[current->selfTile].size(); i++) {
+						
+						//First check if the child has not been searched before
+						if (visited[tileNeighbors[current->selfTile].at(i)] == NULL) {
+							//Readability, store the Tile* of the successorTile
+							Tile* successorTile = tileNeighbors[current->selfTile].at(i);
+
+							//The children node is created using a Tile* in the constructor. The Tile* is found through the current neighbors vector at position i
+							PlannerNode* successorNode = new PlannerNode(successorTile);
+
+							//Store a pointer to the current node inside of the successor node. This is used to trace back the path
+							successorNode->prev = current;
+
+							//Mark the successor as visited as well, bind its Tile* to the PlannerNode
+							visited[successorTile] = successorNode;
+							successorTile->setFill(740405);
+
+							this->q.push(successorNode);
+
+						}
+
+					}
+					
+
+				
+				}
+
+
+
+
 			}
 			//continue until time is 0
 			else {
@@ -240,7 +280,7 @@ namespace ufl_cap4053
 		//Returns true if the update function has finished because it found a solution, and false otherwise.Once a
 		//search has completed, this method should continue to return true until initialize() is called.
 		DLLEXPORT bool PathSearch::isDone() const {
-			return false;
+			return solved;
 		};
 
 		//Return a vector containing the solution path as an ordered series of Tile pointers from finish to start.Once
