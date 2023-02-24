@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include <queue>
+#include "../PriorityQueue.h"
 
 
 namespace ufl_cap4053
@@ -15,6 +16,8 @@ namespace ufl_cap4053
 				Tile* selfTile;
 				PlannerNode* prev;
 
+				float heuristicCost;
+
 				PlannerNode(Tile* curr) {
 					this->selfTile = curr;
 				}
@@ -22,10 +25,18 @@ namespace ufl_cap4053
 			};
 
 			private:
+
+				static bool foo(PlannerNode* const &lhs, PlannerNode* const &rhs) {
+					
+					return lhs->heuristicCost > rhs->heuristicCost;
+
+
+				}
+
 				bool solved = false;
+
 				//This contains the raw TileMap 
 				TileMap* map;
-
 
 				//Contains each Tile* and their neighbor Tile*
 				std::unordered_map<Tile*, std::vector<Tile*>> tileNeighbors;
@@ -33,11 +44,16 @@ namespace ufl_cap4053
 				//Uses in the search. Binds a Tile* to a PlannerNode (Planner nodes have the Tile* itself and its parent)
 				std::unordered_map<Tile*, PlannerNode*> PlannerNodes;
 
+				//FOR Breadth First Search (not used later)
 				//Stores the current Queue for the search
-				std::queue<PlannerNode*> q;
+				//std::queue<PlannerNode*> q;
+
+				ufl_cap4053::PriorityQueue<PlannerNode*> Q;
+				
 
 				//Stores the visited Tile* in a map
 				std::unordered_map<Tile*, PlannerNode*> visited;
+
 
 				//Start and ending Tiles for the current search
 				Tile* start = nullptr;
@@ -50,6 +66,7 @@ namespace ufl_cap4053
 
 		// CLASS DECLARATION GOES HERE
 			public:
+
 				DLLEXPORT PathSearch(); // EX: DLLEXPORT required for public methods - see platform.h
 
 				//The destructor should perform any final cleanup required before deletion of the object.
@@ -85,8 +102,9 @@ namespace ufl_cap4053
 				//Return a vector containing the solution path as an ordered series of Tile pointers from finish to start.Once
 				//a search has been completed, this method continue to return the path until initialize() is called.
 				DLLEXPORT std::vector<Tile const*> const getSolution() const;
-		
 
+
+		
 
 				
 		};

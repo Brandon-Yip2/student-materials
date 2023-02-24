@@ -3,16 +3,29 @@
 #include "../PriorityQueue.h"
 #include <unordered_map>
 #include <queue>
+#include <math.h>
 
 namespace ufl_cap4053
 {
 	namespace searches
 	{
 
+		float estimate(Tile* start, Tile* end) {
+			
+			float distance = 0;
+			
+			float X2 = end->getXCoordinate();
+			float X1 = start->getXCoordinate();
+			float Y2 = end->getYCoordinate();
+			float Y1 = start->getYCoordinate();
+
+			distance = sqrt(pow(X2 - X1, 2) + pow(Y2 - Y1, 2) * 1.0);
+			return distance;
+		}
 
 		// EX: DLLEXPORT required for public methods - see platform.h
-		DLLEXPORT PathSearch::PathSearch() {
-		
+		DLLEXPORT PathSearch::PathSearch() : Q(foo) {
+			
 		} 
 
 		//The destructor should perform any final cleanup required before deletion of the object.
@@ -180,20 +193,24 @@ namespace ufl_cap4053
 
 		}
 
+
+
 		//Called before any update of the path planner; should prepare for search to be performed between the tiles at
 		//the coordinates indicated.This method is always preceded by at least one call to load().
 		DLLEXPORT void PathSearch::initialize(int startRow, int startCol, int goalRow, int goalCol) {
 			//Sets starting and end points, adds start point to search queue
-			//ufl_cap4053::PriorityQueue<int> pQ();
+
+			
 
 			this->start = map->getTile(startRow, startCol);
 			this->end = map->getTile(goalRow, goalCol);
 
 			PlannerNode* firstPlanner = new PlannerNode(start);
 			
-			this->q.push(firstPlanner);
+			this->Q.push(firstPlanner);
 
-			this->visited[start] = q.front();
+			this->visited[start] = Q.front();
+			this->visited[start]->heuristicCost = estimate(start, end);
 
 
 		};
@@ -211,9 +228,9 @@ namespace ufl_cap4053
 			if (once) {
 				
 				//If the q isn't empty, do ONE iteration of the algorithm
-				if (!q.empty()) {
-					PlannerNode* current = q.front();
-					q.pop();
+				if (!Q.empty()) {
+					PlannerNode* current = Q.front();
+					Q.pop();
 					current->selfTile->setFill(0xFFFFC0CB);
 					
 
@@ -238,10 +255,11 @@ namespace ufl_cap4053
 							successorNode->prev = current;
 
 							//Mark the successor as visited as well, bind its Tile* to the PlannerNode
+							successorNode->heuristicCost = estimate(successorTile, this->end);
 							visited[successorTile] = successorNode;
-							successorTile->setFill(740405);
+							successorTile->setFill(0xFF92C9CB);
 
-							this->q.push(successorNode);
+							this->Q.push(successorNode);
 
 						}
 
@@ -250,9 +268,6 @@ namespace ufl_cap4053
 
 				
 				}
-
-
-
 
 			}
 			//continue until time is 0
@@ -291,10 +306,7 @@ namespace ufl_cap4053
 		};
 
 		
-
-
-
-
+	
 
 
 		// CLASS DEFINITION GOES HERE
