@@ -19,6 +19,9 @@ namespace ufl_cap4053
 				float heuristicCost;
 				float givenCost;
 
+				float finalcost;
+
+
 				PlannerNode(Tile* curr) {
 					this->selfTile = curr;
 				}
@@ -27,9 +30,11 @@ namespace ufl_cap4053
 
 			private:
 
+				std::vector<Tile*> Result;
+
 				static bool foo(PlannerNode* const &lhs, PlannerNode* const &rhs) {
 					
-					return lhs->heuristicCost > rhs->heuristicCost;
+					return lhs->finalcost > rhs->finalcost;
 
 
 				}

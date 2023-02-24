@@ -62,7 +62,7 @@ namespace ufl_cap4053
 							if ((rawData->getTile(curr->getRow(), curr->getColumn() + 1)->getWeight() != 0)) {
 								Tile* going = rawData->getTile(curr->getRow(), curr->getColumn() + 1);
 								curr->addLineTo(going, 3);
-								float d = distance(curr, going);
+								float d = 2 * this->map->getTileRadius();
 								float cost = d * going->getWeight();
 								auto pair = std::make_pair(going, cost);
 								tileNeighbors[curr].push_back(pair);
@@ -74,7 +74,7 @@ namespace ufl_cap4053
 							if ((rawData->getTile(curr->getRow() + 1, curr->getColumn()))->getWeight() != 0) {
 								Tile* going = (rawData->getTile(curr->getRow() + 1, curr->getColumn()));
 								curr->addLineTo(going, 3);
-								float d = distance(curr, going);
+								float d = 2 * this->map->getTileRadius();
 								float cost = d * going->getWeight();
 								auto pair = std::make_pair(going, cost);
 								tileNeighbors[curr].push_back(pair);
@@ -88,7 +88,7 @@ namespace ufl_cap4053
 							if ((rawData->getTile(curr->getRow() + 1, curr->getColumn() - 1))->getWeight() != 0) {
 								Tile* going = (rawData->getTile(curr->getRow() + 1, curr->getColumn() - 1));
 								curr->addLineTo(going, 3);
-								float d = distance(curr, going);
+								float d = 2 * this->map->getTileRadius();
 								float cost = d * going->getWeight();
 								auto pair = std::make_pair(going, cost);
 								tileNeighbors[curr].push_back(pair);
@@ -100,7 +100,7 @@ namespace ufl_cap4053
 							if ((rawData->getTile(curr->getRow(), curr->getColumn() - 1))->getWeight() != 0) {
 								Tile* going = (rawData->getTile(curr->getRow(), curr->getColumn() - 1));
 								curr->addLineTo(going, 3);
-								float d = distance(curr, going);
+								float d = 2 * this->map->getTileRadius();
 								float cost = d * going->getWeight();
 								auto pair = std::make_pair(going, cost);
 								tileNeighbors[curr].push_back(pair);
@@ -112,7 +112,7 @@ namespace ufl_cap4053
 							if ((rawData->getTile(curr->getRow() - 1, curr->getColumn() - 1))->getWeight() != 0) {
 								Tile* going = (rawData->getTile(curr->getRow() - 1, curr->getColumn() - 1));
 								curr->addLineTo(going, 3);
-								float d = distance(curr, going);
+								float d = 2 * this->map->getTileRadius();
 								float cost = d * going->getWeight();
 								auto pair = std::make_pair(going, cost);
 								tileNeighbors[curr].push_back(pair);
@@ -125,7 +125,7 @@ namespace ufl_cap4053
 							if ((rawData->getTile(curr->getRow() - 1, curr->getColumn()))->getWeight() != 0) {
 								Tile* going = (rawData->getTile(curr->getRow() - 1, curr->getColumn()));
 								curr->addLineTo(going, 3);
-								float d = distance(curr, going);
+								float d = 2 * this->map->getTileRadius();
 								float cost = d * going->getWeight();
 								auto pair = std::make_pair(going, cost);
 								tileNeighbors[curr].push_back(pair);
@@ -143,7 +143,7 @@ namespace ufl_cap4053
 								if ((rawData->getTile(curr->getRow(), curr->getColumn() + 1)->getWeight() != 0)) {
 									Tile* going = (rawData->getTile(curr->getRow(), curr->getColumn() + 1));
 									curr->addLineTo(going, 3);
-									float d = distance(curr, going);
+									float d = 2 * this->map->getTileRadius();
 									float cost = d * going->getWeight();
 									auto pair = std::make_pair(going, cost);
 									tileNeighbors[curr].push_back(pair);
@@ -156,7 +156,7 @@ namespace ufl_cap4053
 								if ((rawData->getTile(curr->getRow() + 1, curr->getColumn() + 1))->getWeight() != 0) {
 									Tile* going = (rawData->getTile(curr->getRow() + 1, curr->getColumn() + 1));
 									curr->addLineTo(going, 3);
-									float d = distance(curr, going);
+									float d = 2 * this->map->getTileRadius();
 									float cost = d * going->getWeight();
 									auto pair = std::make_pair(going, cost);
 									tileNeighbors[curr].push_back(pair);
@@ -171,7 +171,7 @@ namespace ufl_cap4053
 								if ((rawData->getTile(curr->getRow() + 1, curr->getColumn()))->getWeight() != 0) {
 									Tile* going = (rawData->getTile(curr->getRow() + 1, curr->getColumn()));
 									curr->addLineTo(going, 3);
-									float d = distance(curr, going);
+									float d = 2 * this->map->getTileRadius();
 									float cost = d * going->getWeight();
 									auto pair = std::make_pair(going, cost);
 									tileNeighbors[curr].push_back(pair);
@@ -184,7 +184,7 @@ namespace ufl_cap4053
 								if ((rawData->getTile(curr->getRow(), curr->getColumn() - 1))->getWeight() != 0) {
 									Tile* going = (rawData->getTile(curr->getRow(), curr->getColumn() - 1));
 									curr->addLineTo(going, 3);
-									float d = distance(curr, going);
+									float d = 2 * this->map->getTileRadius();
 									float cost = d * going->getWeight();
 									auto pair = std::make_pair(going, cost);
 									tileNeighbors[curr].push_back(pair);
@@ -197,7 +197,7 @@ namespace ufl_cap4053
 								if ((rawData->getTile(curr->getRow() - 1, curr->getColumn()))->getWeight() != 0) {
 									Tile* going = (rawData->getTile(curr->getRow() - 1, curr->getColumn()));
 									curr->addLineTo(going, 3);
-									float d = distance(curr, going);
+									float d = 2 * this->map->getTileRadius();
 									float cost = d * going->getWeight();
 									auto pair = std::make_pair(going, cost);
 									tileNeighbors[curr].push_back(pair);
@@ -210,7 +210,7 @@ namespace ufl_cap4053
 								if ((rawData->getTile(curr->getRow() - 1, curr->getColumn() + 1))->getWeight() != 0) {
 									Tile* going = (rawData->getTile(curr->getRow() - 1, curr->getColumn() + 1));
 									curr->addLineTo(going, 3);
-									float d = distance(curr, going);
+									float d = 2 * this->map->getTileRadius();
 									float cost = d * going->getWeight();
 									auto pair = std::make_pair(going, cost);
 									tileNeighbors[curr].push_back(pair);
@@ -242,12 +242,15 @@ namespace ufl_cap4053
 			this->end = map->getTile(goalRow, goalCol);
 
 			PlannerNode* firstPlanner = new PlannerNode(start);
+			firstPlanner->prev = nullptr;
 			
 			this->Q.push(firstPlanner);
 
 			this->visited[start] = Q.front();
-			//this->visited[start]->heuristicCost = distance(start, end);
+			this->visited[start]->heuristicCost = distance(start, end);
 			Q.front()->givenCost = 0;
+
+			Q.front()->finalcost = Q.front()->givenCost + Q.front()->heuristicCost;
 
 
 		};
@@ -257,7 +260,7 @@ namespace ufl_cap4053
 		//method should only do a single iteration of the algorithm.Otherwise the update should only iterate for the
 		//indicated number of milliseconds.This method is always preceded by at least one call to initialize().
 		DLLEXPORT void PathSearch::update(long timeslice) {
-			bool once;
+			bool once = false;
 			if (timeslice == 0) {
 				once = true;
 			}
@@ -274,31 +277,67 @@ namespace ufl_cap4053
 					//The current Tile is the end tile, End algorithm
 					if (current->selfTile == this->end) {
 						solved = true;
+
+						while (current->prev != nullptr) {
+						
+
+							current->selfTile->addLineTo(current->prev->selfTile, 0xFFFF0000);
+							Result.push_back(current->selfTile);
+
+							current = current->prev;
+
+							
+						
+						}
+
+
+
 						return;
 					}
 
 					//Not the solution, add its children to the Q
 					for (int i = 0; i < tileNeighbors[current->selfTile].size(); i++) {
+						//Readability, store the Tile* of the successorTile
+						Tile* successorTile = tileNeighbors[current->selfTile].at(i).first;
+
+						//tileNeighbors[current->selfTile].at(i) Is the successor pair, first is the Tile*, second is the cost to go there
+						float tempGivenCost = current->givenCost + tileNeighbors[current->selfTile].at(i).second;
+
 						
 
-						//First check if the child has not been searched before
-						if (visited[tileNeighbors[current->selfTile].at(i).first] == NULL) {
-							//Readability, store the Tile* of the successorTile
-							Tile* successorTile = tileNeighbors[current->selfTile].at(i).first;
+						//if not null, its has been searched before
+						if (visited[tileNeighbors[current->selfTile].at(i).first] != NULL) {
 
+							//Update the successorNode if the current path was cheaper than previous paths
+							if (tempGivenCost < visited[successorTile]->givenCost) {
+								
+								PlannerNode* successorNode = visited[successorTile];
+								Q.remove(successorNode);
+								successorNode->givenCost = tempGivenCost;
+								successorNode->prev = current;
+								Q.push(successorNode);
+
+							}
+
+
+						}
+						else {
 							//The children node is created using a Tile* in the constructor. The Tile* is found through the current neighbors vector at position i
 							PlannerNode* successorNode = new PlannerNode(successorTile);
-
+							successorNode->givenCost = tempGivenCost;
 							//Store a pointer to the current node inside of the successor node. This is used to trace back the path
 							successorNode->prev = current;
 
 							//Mark the successor as visited as well, bind its Tile* to the PlannerNode
-							//successorNode->heuristicCost = distance(successorTile, this->end);
+							successorNode->heuristicCost = distance(successorTile, this->end);
+							successorNode->finalcost = successorNode->givenCost + successorNode->heuristicCost * 1;
+
 							visited[successorTile] = successorNode;
 							successorTile->setFill(0xFF92C9CB);
 
 							this->Q.push(successorNode);
-
+						
+						
 						}
 
 					}
@@ -311,6 +350,11 @@ namespace ufl_cap4053
 			//continue until time is 0
 			else {
 				
+
+
+
+
+
 			}
 
 			
