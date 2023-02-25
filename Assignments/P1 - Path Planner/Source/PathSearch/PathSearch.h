@@ -18,9 +18,7 @@ namespace ufl_cap4053
 
 				float heuristicCost;
 				float givenCost;
-
 				float finalcost;
-
 
 				PlannerNode(Tile* curr) {
 					this->selfTile = curr;
@@ -30,7 +28,7 @@ namespace ufl_cap4053
 
 			private:
 
-				std::vector<Tile*> Result;
+				std::vector<Tile const*> Result;
 
 				static bool foo(PlannerNode* const &lhs, PlannerNode* const &rhs) {
 					
@@ -39,14 +37,14 @@ namespace ufl_cap4053
 
 				}
 
-				bool solved = false;
+				bool solved;
 
 				//This contains the raw TileMap 
 				TileMap* map;
 
 				//Contains each Tile* and their neighbor Tile*
 				
-				std::unordered_map<Tile*, std::vector<std::pair<Tile*, float>>> tileNeighbors;
+				std::unordered_map<Tile*, std::unordered_map<Tile*, std::pair<float, float>>> tileNeighbors;
 
 
 				//Uses in the search. Binds a Tile* to a PlannerNode (Planner nodes have the Tile* itself and its parent)
