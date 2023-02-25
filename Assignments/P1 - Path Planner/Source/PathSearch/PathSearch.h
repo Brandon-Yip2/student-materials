@@ -43,9 +43,7 @@ namespace ufl_cap4053
 				TileMap* map;
 
 				//Contains each Tile* and their neighbor Tile*
-				
 				std::unordered_map<Tile*, std::unordered_map<Tile*, std::pair<float, float>>> tileNeighbors;
-
 
 				//Uses in the search. Binds a Tile* to a PlannerNode (Planner nodes have the Tile* itself and its parent)
 				std::unordered_map<Tile*, PlannerNode*> PlannerNodes;

@@ -31,7 +31,28 @@ namespace ufl_cap4053
 
 		//The destructor should perform any final cleanup required before deletion of the object.
 		DLLEXPORT PathSearch::~PathSearch() {
-		
+			//Deletes map, start, end, tileNeighbors, PlannerNodes, Queue, Result
+			// 
+			// 
+			//Iterates and clears Visited Nodes, Visited map, Queue
+			unload();
+			
+
+			//These should be empty since VisitedNodes has all objects and is cleared in unload when it calls shutdown but iterate just to be sure.
+			for (auto it = PlannerNodes.begin(); it != PlannerNodes.end(); it++) {
+				delete it->second;
+			}
+
+			for (int i = 0; i < Q.size(); i++) {
+				PlannerNode* top = Q.front();
+				delete top;
+				Q.pop();
+			}
+
+
+
+
+
 		}
 
 		//Called after the tile map is loaded.This is usually where the search graph is generated.NOTE: This method
