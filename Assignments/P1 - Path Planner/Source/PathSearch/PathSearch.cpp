@@ -337,8 +337,8 @@ namespace ufl_cap4053
 								PlannerNode* successorNode = visited[successorTile];
 								Q.remove(successorNode);
 								successorNode->givenCost = tempGivenCost;
-								successorNode->heuristicCost = it->second.second;
-								successorNode->finalcost = successorNode->givenCost + successorNode->heuristicCost * 1;
+								successorNode->heuristicCost = distance(successorTile, this->end);
+								successorNode->finalcost = successorNode->givenCost + successorNode->heuristicCost * 1.1;
 								successorNode->prev = current;
 								Q.push(successorNode);
 
@@ -354,8 +354,8 @@ namespace ufl_cap4053
 							successorNode->prev = current;
 
 							//Mark the successor as visited as well, bind its Tile* to the PlannerNode
-							successorNode->heuristicCost = it->second.second;
-							successorNode->finalcost = successorNode->givenCost + successorNode->heuristicCost * 1;
+							successorNode->heuristicCost = distance(successorTile, this->end);
+							successorNode->finalcost = successorNode->givenCost + successorNode->heuristicCost * 1.1;
 
 							visited[successorTile] = successorNode;
 							successorTile->setFill(0xFF92C9CB);
@@ -426,8 +426,8 @@ namespace ufl_cap4053
 									PlannerNode* successorNode = visited[successorTile];
 									Q.remove(successorNode);
 									successorNode->givenCost = tempGivenCost;
-									successorNode->heuristicCost = it->second.second;
-									successorNode->finalcost = successorNode->givenCost + successorNode->heuristicCost * 1;
+									successorNode->heuristicCost = distance(successorTile, this->end);
+									successorNode->finalcost = successorNode->givenCost + successorNode->heuristicCost * 1.1;
 									successorNode->prev = current;
 									Q.push(successorNode);
 
@@ -443,8 +443,8 @@ namespace ufl_cap4053
 								successorNode->prev = current;
 
 								//Mark the successor as visited as well, bind its Tile* to the PlannerNode
-								successorNode->heuristicCost = it->second.second;
-								successorNode->finalcost = successorNode->givenCost + successorNode->heuristicCost * 1;
+								successorNode->heuristicCost = distance(successorTile, this->end);
+								successorNode->finalcost = successorNode->givenCost + successorNode->heuristicCost * 1.1;
 
 								visited[successorTile] = successorNode;
 								successorTile->setFill(0xFF92C9CB);
