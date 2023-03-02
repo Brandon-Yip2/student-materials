@@ -17,7 +17,34 @@ namespace AI.SteeringBehaviors.StudentAI
         public virtual void Update(float deltaTime)
         {
             // Update goes here
+            
+            //First calculate the AverageForward and Average Position
+
+
+
         }
         #endregion
+
+        private Vector3 calcAverageForward() {
+
+            return 0;
+        }
+
+
+        private Vector3 CalcAlignmentAccel() {
+        
+        }
+
+        private Vector3 CalcCohesionAccel() { 
+        
+        }
+
+        private Vector3 CalcSeparationAccel() { 
+        
+        }
+
+
+
+
     }
 }
