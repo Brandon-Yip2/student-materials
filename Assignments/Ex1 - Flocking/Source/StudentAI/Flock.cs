@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using AI.SteeringBehaviors.Core;
+using System;
 
 namespace AI.SteeringBehaviors.StudentAI
 {
@@ -33,8 +34,10 @@ namespace AI.SteeringBehaviors.StudentAI
                 accel *= accelMultiplier * deltaTime;
                 m.Velocity += accel;
 
+
+                
                 //Calculate Velocities maginitude
-                float velocityMag = m.Velocity.X * m.Velocity.X + m.Velocity.Y * m.Velocity.Y + m.Velocity.Z * m.Velocity.Z;
+                float velocityMag = (float) Math.Sqrt(m.Velocity.X * m.Velocity.X + m.Velocity.Y * m.Velocity.Y + m.Velocity.Z * m.Velocity.Z);
 
                 if (velocityMag > m.MaxSpeed) {
 
@@ -95,7 +98,7 @@ namespace AI.SteeringBehaviors.StudentAI
 
         private Vector3 CalcAlignmentAccel(MovingObject boid) {
             Vector3 v = AverageForward / boid.MaxSpeed;
-            float magnitude = v.X * v.X + v.Y * v.Y + v.Z * v.Z;
+            float magnitude = (float)Math.Sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
             if (magnitude > 1) {
                 v.Normalize();
             }
@@ -107,7 +110,7 @@ namespace AI.SteeringBehaviors.StudentAI
 
             foreach (MovingObject otherB in Boids) {
                 Vector3 vector = boid.Position - otherB.Position;
-                float distance = vector.X * vector.X + vector.Y * vector.Y + vector.Z * vector.Z;
+                float distance = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y + vector.Z * vector.Z);
                 float safeDistance = boid.SafeRadius + otherB.SafeRadius;
 
                 if (distance < safeDistance) {
@@ -127,7 +130,7 @@ namespace AI.SteeringBehaviors.StudentAI
         private Vector3 CalcSeparationAccel(MovingObject boid) {
 
             Vector3 v = AveragePosition - boid.Position;
-            float distance = v.X * v.X + v.Y * v.Y + v.Z * v.Z;
+            float distance = (float)Math.Sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
             v.Normalize();
 
             if (distance < FlockRadius) { 
