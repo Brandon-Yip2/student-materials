@@ -267,9 +267,6 @@ namespace ufl_cap4053
 							}
 						}
 
-
-
-
 				}
 			}
 			
@@ -482,18 +479,11 @@ namespace ufl_cap4053
 					}
 
 
-
-
-
 				}
 				
-
-
-
 			}
 
 			
-
 		};
 
 		//Called when the current search data is no longer needed.It should clean up any memory allocated for this
