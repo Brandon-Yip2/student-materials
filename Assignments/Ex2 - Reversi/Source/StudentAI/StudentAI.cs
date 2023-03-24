@@ -13,9 +13,9 @@ namespace GameAI.GamePlaying
 
 
         public int invertColor(int _color) {
-            if (_color == 0) return 1;
-            else if (_color == 1) return 0;
-            else return -1;
+            if (_color == -1) return 1;
+            else if (_color == 1) return -1;
+            else return 9999999;
         }
         public int GetNextPlayer(int _color, Board _board) {
             //The _board parameter already has our played move on it.
@@ -29,13 +29,37 @@ namespace GameAI.GamePlaying
 
         }
 
+        public bool betterMove(int _color, ComputerMove currentMove, ComputerMove bestMove) {
+            //Return 1 if there is a better move, 0 if there isn't
+
+
+            // 1 is white, we want the move with higher value
+            if (_color == 1)
+            {
+                if (currentMove.rank > bestMove.rank)
+                {
+                    return true;
+                }
+            }   
+            //0 is black, we want the move with the lower rank
+            else if (_color == -1) {
+                if (currentMove.rank < bestMove.rank) {
+                    return true;
+                }
+            }
+
+            return false;
+
+        
+        }
+
         // TODO: Methods go here
         public ComputerMove Run(int _color, Board _board, int _lookAheadDepth)
         {
 
 
             ComputerMove bestMove = null;
-          
+
             Board newBoard = new Board();
 
 
@@ -66,7 +90,7 @@ namespace GameAI.GamePlaying
 
                 if (newBoard.IsTerminalState() || _lookAheadDepth == 0)
                 {
-                    move.rank = ExampleAI.MinimaxExample.EvaluateTest(newBoard);
+                    move.rank = Evaluate(newBoard);
                 }
                 else {
                     move.rank = Run(GetNextPlayer(_color, newBoard), newBoard, _lookAheadDepth - 1).rank;
@@ -75,7 +99,7 @@ namespace GameAI.GamePlaying
 
                 //Best Move shouldn't always be larger. Black and White want either negatives or positives. Change tomorrow
                 //Also change evalutateTest and make your own.
-                if (bestMove == null || move.rank > bestMove.rank) {
+                if (bestMove == null || betterMove(_color, move, bestMove)) {
                     bestMove = move;
                 }
 
@@ -89,9 +113,49 @@ namespace GameAI.GamePlaying
 
         }
 
-        public int Evaluate(Board board) {
 
-            return 0;
+        public bool cornerTile(int i, int j)
+        {
+            if ((i == 0 & j == 0) || (i == 0 & j == 7) || (i == 7 & j == 0) || (i == 7 & j == 7)) {
+                return true;
+            }
+            return false;
+
+        }
+
+        public bool edgeTile(int i, int j) {
+            if (cornerTile(i, j) == false) {
+
+                if (i == 0 || j == 0 || i == 7 || j == 7) {
+                    return true;
+                }
+            }
+            return false;
+            
+        }
+
+        public int Evaluate(Board board) {
+            int totalEvaluation = 0;
+
+            //For each tile, calculate its value and add it to the total sum
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+
+                    int curr = board.GetTile(i, j);
+
+                    if (cornerTile(i, j))
+                    {
+                        curr *= 100;
+                    }
+                    else if (edgeTile(i, j)) {
+                        curr *= 10;
+                    }
+                    totalEvaluation += curr;
+                }
+            }
+
+            return totalEvaluation;
+
         }
 
 
