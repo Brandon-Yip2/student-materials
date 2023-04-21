@@ -1,7 +1,7 @@
 #Robocode robot team
-#Fri Apr 21 13:06:31 EDT 2023
+#Fri Apr 21 13:07:25 EDT 2023
 team.members=CAP4053.Benchmark.FailBotSharp,CAP4053.Benchmark.FailBotSharp,CAP4053.Benchmark.FailBotSharp,CAP4053.Benchmark.FailBotSharp
 team.author.name=
 robocode.version=1.9.3.3
-team.description=4 failbots
+team.description=4 of mine
 team.version=4
